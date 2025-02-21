@@ -2,6 +2,9 @@ import os
 import sys
 import subprocess
 from pynput import keyboard
+from colorama import Fore, Style, init
+
+init(autoreset=True)  # Mengaktifkan reset otomatis warna
 
 # Daftar pilihan framework CSS
 css_frameworks = ["Tanpa Framework", "Bootstrap", "Tailwind CSS"]
@@ -9,10 +12,10 @@ selected_index = 0  # Indeks pilihan yang dipilih
 
 def display_menu():
     os.system('cls' if os.name == 'nt' else 'clear')  # Bersihkan layar
-    print("Pilih framework CSS:")
+    print(Fore.CYAN + "🌟 Pilih framework CSS: 🌟" + Style.RESET_ALL)
     for i, framework in enumerate(css_frameworks):
-        prefix = "➜ " if i == selected_index else "  "
-        print(f"{prefix}{framework}")
+        prefix = Fore.GREEN + "➜ " if i == selected_index else "  "
+        print(f"{prefix}{framework}" + Style.RESET_ALL)
 
 def on_press(key):
     global selected_index
@@ -37,16 +40,17 @@ def create_project(project_name, css_framework):
     # File HTML
     with open(f"{project_name}/index.html", "w") as f:
         f.write(f"""<!DOCTYPE html>
-<html lang=\"id\">
+<html lang="id">
 <head>
-    <meta charset=\"UTF-8\">
-    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{project_name}</title>
     {generate_css_link(css_framework)}
-    <link rel=\"stylesheet\" href=\"css/style.css\">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <script src=\"js/script.js\"></script>
+    <h1>Welcome to {project_name}!</h1>
+    <script src="js/script.js"></script>
 </body>
 </html>
 """)
@@ -59,7 +63,8 @@ def create_project(project_name, css_framework):
     with open(f"{project_name}/js/script.js", "w") as f:
         f.write("console.log('Hello World');")
     
-    print(f"Proyek '{project_name}' berhasil dibuat dengan {css_framework}!")
+    print(Fore.YELLOW + f"🎉 Proyek '{project_name}' berhasil dibuat dengan {css_framework}! 🚀" + Style.RESET_ALL)
+    print(Fore.MAGENTA + "🔧 Tool by Noval" + Style.RESET_ALL)
 
 # Fungsi untuk menambahkan link CSS
 def generate_css_link(css_framework):
@@ -71,7 +76,7 @@ def generate_css_link(css_framework):
 
 # Jalankan
 if __name__ == "__main__":
-    project_name = input("Masukkan nama proyek: ")
+    project_name = input(Fore.BLUE + "📁 Masukkan nama proyek: " + Style.RESET_ALL)
     
     # Pilih CSS Framework dengan navigasi panah
     display_menu()
