@@ -1,0 +1,10 @@
+README.md
+setup.py
+webgen/__init__.py
+webgen/main.py
+webgen.egg-info/PKG-INFO
+webgen.egg-info/SOURCES.txt
+webgen.egg-info/dependency_links.txt
+webgen.egg-info/entry_points.txt
+webgen.egg-info/requires.txt
+webgen.egg-info/top_level.txt

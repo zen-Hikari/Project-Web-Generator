@@ -1,12 +1,10 @@
 import os
 import sys
-import subprocess
 from pynput import keyboard
 from colorama import Fore, Style, init
 
 init(autoreset=True)  # Mengaktifkan reset otomatis warna
 
-# Daftar pilihan framework CSS
 css_frameworks = ["Tanpa Framework", "Bootstrap", "Tailwind CSS"]
 selected_index = 0  # Indeks pilihan yang dipilih
 
@@ -27,7 +25,6 @@ def on_press(key):
         return False  # Stop listener saat enter ditekan
     display_menu()
 
-# Fungsi utama untuk membuat proyek
 def create_project(project_name, css_framework):
     structure = [
         f"{project_name}/css",
@@ -37,7 +34,6 @@ def create_project(project_name, css_framework):
     for folder in structure:
         os.makedirs(folder, exist_ok=True)
     
-    # File HTML
     with open(f"{project_name}/index.html", "w") as f:
         f.write(f"""<!DOCTYPE html>
 <html lang="id">
@@ -55,18 +51,15 @@ def create_project(project_name, css_framework):
 </html>
 """)
     
-    # File CSS
     with open(f"{project_name}/css/style.css", "w") as f:
         f.write("body { font-family: Arial, sans-serif; }")
     
-    # File JS
     with open(f"{project_name}/js/script.js", "w") as f:
         f.write("console.log('Hello World');")
     
     print(Fore.YELLOW + f"🎉 Proyek '{project_name}' berhasil dibuat dengan {css_framework}! 🚀" + Style.RESET_ALL)
     print(Fore.MAGENTA + "🔧 Tool by Noval" + Style.RESET_ALL)
 
-# Fungsi untuk menambahkan link CSS
 def generate_css_link(css_framework):
     if css_framework == "Bootstrap":
         return '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">'
@@ -74,14 +67,15 @@ def generate_css_link(css_framework):
         return '<script src="https://cdn.tailwindcss.com"></script>'
     return ""
 
-# Jalankan
-if __name__ == "__main__":
+def main():
     project_name = input(Fore.BLUE + "📁 Masukkan nama proyek: " + Style.RESET_ALL)
     
-    # Pilih CSS Framework dengan navigasi panah
     display_menu()
     with keyboard.Listener(on_press=on_press) as listener:
         listener.join()
     
     chosen_framework = css_frameworks[selected_index]
     create_project(project_name, chosen_framework)
+
+if __name__ == "__main__":
+    main()

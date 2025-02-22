@@ -1,0 +1,6 @@
+Metadata-Version: 2.2
+Name: webgen
+Version: 0.1
+Requires-Dist: pynput
+Requires-Dist: colorama
+Dynamic: requires-dist
