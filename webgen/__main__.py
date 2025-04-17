@@ -1,10 +1,12 @@
 import os
-import questionary
-import signal
+import shutil
+import json
 import sys
+import signal
+import questionary
 from questionary import Choice, Style
 
-# Gaya Vite
+# Custom CLI style
 custom_style = Style([
     ("qmark", "fg:#00ffff bold"),
     ("question", "bold"),
@@ -17,88 +19,76 @@ custom_style = Style([
     ("instruction", "fg:#5f5f5f italic")
 ])
 
-# Fungsi untuk menangani Ctrl+C
+# Handle Ctrl+C
 def signal_handler(sig, frame):
-    print("\nOperation canceled")
+    print("\n❌ Operasi dibatalkan.")
     sys.exit(0)
 
-# Menangani sinyal SIGINT (Ctrl + C)
 signal.signal(signal.SIGINT, signal_handler)
 
-# Masukkan nama proyek di awal
-try:
-    project_name = questionary.text("📁 Masukkan nama proyek:").ask()
-    if not project_name:
-        raise ValueError("Nama proyek tidak boleh kosong.")
-except KeyboardInterrupt:
-    print("\nOperation canceled")
-    sys.exit(0)
-except ValueError as e:
-    print(f"\n{e}")
-    sys.exit(0)
-
+# Masukkan nama proyek
+project_name = questionary.text("📁 Masukkan nama proyek:").ask()
+if not project_name:
+    print("❌ Nama proyek tidak boleh kosong.")
+    sys.exit(1)
 project_name = project_name.strip().replace(" ", "-")
 
-# Pilih jenis proyek
+# Pilih tipe proyek
 project_type = questionary.select(
     "🌟 Pilih Tipe Proyek:",
     choices=[
-        "○ │  HTML + CSS",
-        "○ │  React",
-        "○ │  Vue",
-        "○ │  Svelte"
+        "HTML + CSS",
+        "React"
     ],
     style=custom_style
 ).ask()
 
-print("\n")
+# Pilih CSS framework
+if project_type == "React":
+    css_framework = questionary.select(
+        "🎨 Pilih CSS untuk React:",
+        choices=[
+            "CSS Sendiri"
+        ],
+        style=custom_style
+    ).ask()
+else:
+    css_framework = questionary.select(
+        "🎨 Pilih CSS untuk HTML:",
+        choices=[
+            "Manual CSS",
+            "Tailwind CSS",
+            "Bootstrap"
+        ],
+        style=custom_style
+    ).ask()
 
-# Pilih framework CSS
-css_framework = questionary.select(
-    "🧩 Pilih CSS Framework:",
-    choices=[
-        "○ │  Tanpa Framework (Manual CSS)",
-        "○ │  Tailwind CSS",
-        "○ │  Bootstrap",
-        "○ │  Bulma",
-        "○ │  Materialize",
-        Choice("○ │  Chakra UI", disabled="❌ Belum tersedia")
-    ],
-    style=custom_style
-).ask()
+# Fungsi bantu untuk menulis file
+def write_file(path, content):
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(content)
 
-print("\n")
+# Path ke template react
+TEMPLATE_REACT = os.path.join(os.path.dirname(__file__), "template", "react")
 
-# Buat struktur proyek
-folders = [
-    f"{project_name}/css",
-    f"{project_name}/js",
-    f"{project_name}/img"
-]
-for folder in folders:
-    os.makedirs(folder, exist_ok=True)
+# ==== HTML + CSS ====
+if project_type == "HTML + CSS":
+    os.makedirs(f"{project_name}/css", exist_ok=True)
+    os.makedirs(f"{project_name}/js", exist_ok=True)
 
-# Fungsi generate link CSS
-def generate_css_link(framework):
-    if "Tailwind" in framework:
-        return '<script src="https://cdn.tailwindcss.com"></script>'
-    elif "Bootstrap" in framework:
-        return '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">'
-    elif "Bulma" in framework:
-        return '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">'
-    elif "Materialize" in framework:
-        return '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">'
-    return ""  # Manual CSS
+    css_cdn = ""
+    if css_framework == "Tailwind CSS":
+        css_cdn = '<script src="https://cdn.tailwindcss.com"></script>'
+    elif css_framework == "Bootstrap":
+        css_cdn = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">'
 
-# Buat file HTML
-with open(f"{project_name}/index.html", "w") as f:
-    f.write(f"""<!DOCTYPE html>
+    html_content = f"""<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{project_name}</title>
-    {generate_css_link(css_framework)}
+    {css_cdn}
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -106,18 +96,103 @@ with open(f"{project_name}/index.html", "w") as f:
     <script src="js/script.js"></script>
 </body>
 </html>
+"""
+    write_file(f"{project_name}/index.html", html_content)
+    write_file(f"{project_name}/css/style.css", "body { font-family: Arial, sans-serif; }")
+    write_file(f"{project_name}/js/script.js", "console.log('Hello World');")
+
+# ==== REACT ====
+elif project_type == "React":
+    os.makedirs(f"{project_name}/public", exist_ok=True)
+    os.makedirs(f"{project_name}/src/assets", exist_ok=True)
+
+    # Salin file template dari template/react
+    shutil.copy(os.path.join(TEMPLATE_REACT, "App.jsx"), f"{project_name}/src/App.jsx")
+    shutil.copy(os.path.join(TEMPLATE_REACT, "main.jsx"), f"{project_name}/src/main.jsx")
+    shutil.copy(os.path.join(TEMPLATE_REACT, "App.css"), f"{project_name}/src/App.css")
+    shutil.copy(os.path.join(TEMPLATE_REACT, "react.png"), f"{project_name}/src/assets/react.png")
+
+    # Buat index.css default
+    write_file(f"{project_name}/src/index.css", """body {
+    background-color: rgb(25, 25, 39);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 """)
 
-# Buat file style.css dan script.js
-with open(f"{project_name}/css/style.css", "w") as f:
-    f.write("body { font-family: Arial, sans-serif; }")
+    # index.html
+    write_file(f"{project_name}/index.html", f"""<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{project_name}</title>
+    <script type="module" src="/src/main.jsx"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
+""")
 
-with open(f"{project_name}/js/script.js", "w") as f:
-    f.write("console.log('Hello World');")
+    # package.json kosong
+    write_file(f"{project_name}/package.json", "{}")
 
-# Output akhir
-print("\n✅ Proyek berhasil dibuat!")
+    # Install React & Vite
+    os.system(f"cd {project_name} && pnpm add react react-dom")
+    os.system(f"cd {project_name} && pnpm add -D vite @vitejs/plugin-react")
+
+    # Setup tailwind modern (jika dipilih)
+    if css_framework == "Tailwind CSS":
+        os.system(f"cd {project_name} && pnpm install tailwindcss @tailwindcss/vite")
+
+        # Ganti index.css
+        write_file(f"{project_name}/src/index.css", """@import "tailwindcss";
+
+body {
+  background-color: rgb(25, 25, 39);
+}
+""")
+
+        # Ganti vite.config.js
+        write_file(f"{project_name}/vite.config.js", """import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
+
+export default defineConfig({
+  plugins: [
+    react(),
+    tailwindcss()
+  ],
+})
+""")
+    else:
+        # Jika CSS sendiri
+        write_file(f"{project_name}/vite.config.js", """import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+
+export default defineConfig({
+  plugins: [react(),],
+})
+""")
+
+    # Tambahkan scripts ke package.json
+    pkg_path = os.path.join(project_name, "package.json")
+    with open(pkg_path, "r+", encoding="utf-8") as f:
+        data = json.load(f)
+        data["scripts"] = {
+            "dev": "vite",
+            "build": "vite build",
+            "preview": "vite preview"
+        }
+        f.seek(0)
+        json.dump(data, f, indent=2)
+        f.truncate()
+
+# ==== OUTPUT ====
+print("✅ Proyek berhasil dibuat!")
 print(f"📁 Nama proyek: {project_name}")
-print(f"🔧 Tipe: {project_type.replace('○ │  ', '')}")
-print(f"🎨 CSS: {css_framework.replace('○ │  ', '')}")
-print("🚀 Sukses! 🎉")
+print(f"🔧 Tipe: {project_type}")
+print(f"🎨 CSS: {css_framework}")
+print("🚀 Jalankan:")
+print(f"   cd {project_name} && pnpm install && pnpm run dev")
