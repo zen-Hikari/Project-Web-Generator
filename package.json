@@ -1,5 +1,5 @@
 {
-  "name": "webgen-cli",
+  "name": "@novalhikari/webgen-cli",
   "version": "1.0.0",
   "description": "CLI untuk membuat proyek template menggunakan Python",
   "main": "index.js",
