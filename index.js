@@ -7,12 +7,17 @@ import path from "path";
 import fs from "fs";
 import { fileURLToPath } from 'url';
 import pkg from './package.json' assert { type: 'json' };
+
 // Menangani path untuk modul ES
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Notifikasi update
-updateNotifier({ pkg }).notify();
+const notifier = updateNotifier({ pkg });
+if (notifier.update) {
+  console.log(chalk.yellow(`🚨 Update tersedia! Versi baru: ${notifier.update.latest}`));
+  console.log(chalk.green(`Jalankan 'npm update -g @novalhikari/webgen-cli' untuk memperbarui.`));
+}
 
 // Bersihkan terminal dan info versi
 console.clear();
