@@ -6,8 +6,7 @@ import { execSync } from "child_process";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from 'url';
-import pkg from './package.json';
-
+import pkg from './package.json' assert { type: 'json' };
 // Menangani path untuk modul ES
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
