@@ -1,11 +1,16 @@
 #!/usr/bin/env node
 
-const updateNotifier = require('update-notifier');
-const chalk = require('chalk');
-const { execSync } = require("child_process");
-const path = require("path");
-const fs = require("fs");
-const pkg = require('./package.json');
+import updateNotifier from 'update-notifier';
+import chalk from 'chalk';
+import { execSync } from "child_process";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from 'url';
+import pkg from './package.json';
+
+// Menangani path untuk modul ES
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Notifikasi update
 updateNotifier({ pkg }).notify();
