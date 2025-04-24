@@ -13,5 +13,6 @@
   "dependencies": {
     "chalk": "^5.4.1",
     "update-notifier": "^5.1.0"
-  }
+  },
+  "type": "module"
 }
