@@ -1,0 +1,52 @@
+.webgen {
+    padding-top: 15px;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    color: white;
+    font-size: 25px;
+    font-weight: 700;
+    padding-bottom: 20px;
+    text-align: center;
+}
+
+.img {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 20px;
+}
+
+.react-con {
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: center;
+}
+
+.react {
+    color: white;
+    font-size: 30px;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+}
+.github {
+    display: flex;
+    justify-content: center;
+}
+.github a {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+}
+
+.desc h5 {
+    font-size: 20px;
+    color: white;
+    font-weight: 500;
+    margin-bottom: 50px;
+    text-align: center;
+}
