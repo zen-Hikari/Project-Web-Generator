@@ -1,23 +1,35 @@
 #!/usr/bin/env node
 
-// Bersihkan terminal
-console.clear();
-
-// Import modul dari Node.js
+const updateNotifier = require('update-notifier');
+const chalk = require('chalk');
 const { execSync } = require("child_process");
 const path = require("path");
 const fs = require("fs");
+const pkg = require('./package.json');
 
-// Path ke file Python
+// Notifikasi update
+updateNotifier({ pkg }).notify();
+
+// Bersihkan terminal dan info versi
+console.clear();
+console.log(chalk.blueBright(`🚀 WebGen CLI v${pkg.version}`));
+
+// Cek apakah Python tersedia
+try {
+  execSync("python --version", { stdio: "ignore" });
+} catch {
+  console.error("❌ Python tidak terdeteksi. Pastikan Python sudah terinstall dan ditambahkan ke PATH.");
+  process.exit(1);
+}
+
+// Jalankan __main__.py
 const scriptPath = path.join(__dirname, "__main__.py");
 
-// Cek apakah file Python ada
 if (!fs.existsSync(scriptPath)) {
   console.error("❌ File __main__.py tidak ditemukan.");
   process.exit(1);
 }
 
-// Jalankan file Python
 try {
   execSync(`python "${scriptPath}"`, { stdio: "inherit" });
 } catch (error) {
