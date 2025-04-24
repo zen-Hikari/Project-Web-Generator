@@ -13,7 +13,7 @@ const scriptPath = path.join(__dirname, "__main__.py");
 
 // Cek apakah file Python ada
 if (!fs.existsSync(scriptPath)) {
-  console.error("❌ File webgen.py tidak ditemukan.");
+  console.error("❌ File __main__.py tidak ditemukan.");
   process.exit(1);
 }
 
@@ -21,6 +21,6 @@ if (!fs.existsSync(scriptPath)) {
 try {
   execSync(`python "${scriptPath}"`, { stdio: "inherit" });
 } catch (error) {
-  console.error("❌ Gagal menjalankan webgen.py:", error.message);
+  console.error("❌ Gagal menjalankan __main__.py:", error.message);
   process.exit(1);
 }
