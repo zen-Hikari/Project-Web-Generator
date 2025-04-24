@@ -1,42 +1,59 @@
-# EXPRESS STACK - Node Server Boilerplate
+﻿# 🚀 Project Web Generator
 
-Boilerplate/starter project to easily create RESTful APIs using Node.js, Express, and Mongoose.
-Simply create a new Express application with one command
+Project Web Generator is a 🛠️ Python tool that helps developers quickly create a structured web project with their preferred CSS framework. Users can navigate the selection using arrow keys and confirm their choice with Enter.
 
-## Quick Started
+## ✨ Features
+- ✅ **Automatically generates a web project structure** based on user input.
+- 🎨 **Allows users to choose a CSS framework** for their project:
+  - 🌐 **Manual CSS** (for HTML + CSS projects)
+  - 🎨 **Bootstrap** (for HTML + CSS projects)
+  - 🌊 **Tailwind CSS** (for HTML + CSS and React projects)
+  - 🧩 **Custom CSS** (for React projects)
+- ⌨️ **Interactive CLI interface**: Uses arrow keys for selection, and Enter to confirm.
+- 📂 **Creates essential project files**:
+  - For **HTML + CSS**: `index.html`, `style.css`, `script.js`.
+  - For **React**: `index.html`, `App.jsx`, `App.css`, `main.jsx`, `index.css`, `vite.config.js`, and `package.json`.
+- ⚙️ **Supports automatic installation** of dependencies like React, Vite, and Tailwind CSS (if selected).
 
-### Running Server
 
-```bash
-npm run dev
+## 📋 Requirements
+Make sure you have Python installed (version 3.x recommended). You also need the `pynput` package for keyboard navigation.
+
+Install dependencies using:
+```sh
+pip install -r requirements.txt
 ```
 
-### Deploy 
-```bash
-npm run deploy
-```
+## 🚀 Installation & Usage
+### 🔹 Install Globally
+To use `webgen` as a globally executable command:
+1. Install the package in editable mode:
+   ```sh
+   pip install --editable .
+   ```
+2. Now, you can execute the command from anywhere:
+   ```sh
+   python -m webgen
+   ```
 
-and now you can development application
+### 🔹 Run Locally
+1. Clone this repository:
+   ```sh
+   git clone https://github.com/zen-Hikari/Project-Web-Generator.git
+   ```
+2. Navigate to the project folder:
+   ```sh
+   cd Project-Web-Generator
+   ```
+3. Run the script directly:
+   ```sh
+   python __main__.py
+   ```
+4. Follow the on-screen instructions to create your project.
 
-## Features
+## 🤝 Contributing
+Feel free to fork this project and submit pull requests to improve it! 💡
 
-- **Web Framework** : using [Express JS](https://expressjs.com/)
-- **Database No SQL** : [Mongo DB](https://www.mongodb.com/) with object data modeling [Mongoose](https://mongoosejs.com/)
-- **Logging** : using [Morgan](https://www.npmjs.com/package/morgan)
-- **CORS** : Cross-origin resource sharing using [CORS](https://www.npmjs.com/package/cors)
-- **Environment variables** : using [Dotenv](https://www.npmjs.com/package/dotenv)
-- Authentication and Authorization with **jsonwebtoken** [JWT](https://www.npmjs.com/package/jsonwebtoken)
+## 📜 License
+This project is licensed under the MIT License.
 
-# Project Structure
-
-```
-config\         # Configuration & Database function
-src\
- |--controllers\    # Controllers function
- |--middlewares\    # Custom express middlewares
- |--models\         # Mongoose models
- |--router\         # Routes
- |--docs\           # Swagger files
-.env            # Environment variables
-index.js        # App entry point
-```

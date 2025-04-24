@@ -1,29 +1,26 @@
-import express from "express";
-import cors from "cors";
-import morgan from "morgan";
-import bodyParser from "body-parser";
-import router from "./src/router/index.js";
+#!/usr/bin/env node
 
-import "dotenv/config";
+// Bersihkan terminal
+console.clear();
 
-const app = express();
+// Import modul dari Node.js
+const { execSync } = require("child_process");
+const path = require("path");
+const fs = require("fs");
 
-app.use(express.json());
-app.use(cors({ origin: "*" }));
-app.use(morgan("dev"));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+// Path ke file Python
+const scriptPath = path.join(__dirname, "__main__.py");
 
-app.get("/", (req, res) => {
-  res.json({
-    message: "Welcome! to my server👋",
-  });
-});
+// Cek apakah file Python ada
+if (!fs.existsSync(scriptPath)) {
+  console.error("❌ File webgen.py tidak ditemukan.");
+  process.exit(1);
+}
 
-app.use("/api", router);
-
-// PORT
-const port = 3000;
-app.listen(port, async () =>
-  console.log(`⦗INFO🔥⦘ Server running on http://localhost:${port}`)
-);
+// Jalankan file Python
+try {
+  execSync(`python "${scriptPath}"`, { stdio: "inherit" });
+} catch (error) {
+  console.error("❌ Gagal menjalankan webgen.py:", error.message);
+  process.exit(1);
+}
