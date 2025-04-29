@@ -1,4 +1,4 @@
-﻿# 🚀 Project Web Generator
+﻿﻿# 🚀 Project Web Generator
 
 Project Web Generator is a 🛠️ Python tool that helps developers quickly create a structured web project with their preferred CSS framework. Users can navigate the selection using arrow keys and confirm their choice with Enter.
 
@@ -15,29 +15,11 @@ Project Web Generator is a 🛠️ Python tool that helps developers quickly cre
   - For **React**: `index.html`, `App.jsx`, `App.css`, `main.jsx`, `index.css`, `vite.config.js`, and `package.json`.
 - ⚙️ **Supports automatic installation** of dependencies like React, Vite, and Tailwind CSS (if selected).
 
-
-## 📋 Requirements
-Make sure you have Python installed (version 3.x recommended). You also need the `pynput` package for keyboard navigation.
-
-Install dependencies using:
-```sh
-pip install -r requirements.txt
-```
-
 ## 🚀 Installation & Usage
 ### 🔹 Install Globally
 To use `webgen` as a globally executable command:
-1. Install the package in editable mode:
-   ```sh
-   pip install --editable .
-   ```
-2. Now, you can execute the command from anywhere:
-   ```sh
-   python -m webgen
-   ```
 
-### 🔹 Run Locally
-1. Clone this repository:
+1. Install the package in editable mode:
    ```sh
    git clone https://github.com/zen-Hikari/Project-Web-Generator.git
    ```
@@ -45,9 +27,17 @@ To use `webgen` as a globally executable command:
    ```sh
    cd Project-Web-Generator
    ```
-3. Run the script directly:
+3. Install dependencies using:
    ```sh
-   python __main__.py
+   pip install -r requirements.txt
+   ```
+4. Install Globally
+   ```sh
+   pnpm add -g @novalhikari/webgen-cli
+   ```
+5. Run the tool:
+   ```sh
+   webgen
    ```
 4. Follow the on-screen instructions to create your project.
 
@@ -56,4 +46,3 @@ Feel free to fork this project and submit pull requests to improve it! 💡
 
 ## 📜 License
 This project is licensed under the MIT License.
-
