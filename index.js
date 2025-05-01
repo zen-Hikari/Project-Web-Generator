@@ -32,10 +32,8 @@ async function checkForUpdates() {
     console.error("❌ Gagal memeriksa pembaruan:", error.message);
   }
 }
-
 // Jalankan pemeriksaan pembaruan
 checkForUpdates();
-
 // Cek apakah Python tersedia
 try {
   execSync("python --version", { stdio: "ignore" });
