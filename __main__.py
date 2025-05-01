@@ -6,17 +6,46 @@ import signal
 import questionary
 from questionary import Choice, Style
 
+# === ASCII ART di Awal ===
+ascii_art = """
+\033[1;35m
+██╗    ██╗███████╗██████╗  ██████╗ ███████╗███╗   ██╗
+██║    ██║██╔════╝██╔══██╗██╔════╝ ██╔════╝████╗  ██║
+██║ █╗ ██║█████╗  ██████╔╝██║  ███╗█████╗  ██╔██╗ ██║
+██║███╗██║██╔══╝  ██╔══██╗██║   ██║██╔══╝  ██║╚██╗██║
+╚███╔███╔╝███████╗██████╔╝╚██████╔╝███████╗██║ ╚████║
+ ╚══╝╚══╝ ╚══════╝╚═════╝  ╚═════╝ ╚══════╝╚═╝  ╚═══╝
+\033[0m
+"""
+print(ascii_art)
+
+# ==== Credit ====
+# color
+BLUE = "\033[34m"
+RESET = "\033[0m"
+
+fixed_width = 60
+
+# text
+title = f"{BLUE}Halo, Selamat datang di Webgen{RESET}"
+author = f"{BLUE}By Noval Hasmi W. @2025{RESET}"
+
+print(title.center(fixed_width))
+print(author.center(fixed_width))
+print("\n") 
+
+
 # Custom CLI style
 custom_style = Style([
-    ("qmark", "fg:#3498db"),  # Warna cyan terang untuk tanda tanya
-    ("question", "fg:#95a5a6"),  # Warna abu-abu untuk pertanyaan
-    ("selected", "fg:#FF00FF"),  # Warna magenta untuk opsi terpilih
-    ("pointer", "fg:#3498db"),  # Warna biru untuk pointer ➥
-    ("answer", "fg:#f2f2f2"),  # Warna abu-abu terang untuk jawaban
-    ("separator", "fg:#666666"),  # Warna abu gelap untuk separator
-    ("highlighted", "fg:#3498db"),  # Warna magenta untuk highlight
-    ("disabled", "fg:#858585 italic"),  # Warna abu-abu gelap + italic
-    ("instruction", "fg:#5f5f5f italic")  # Warna abu-abu + italic
+    ("qmark", "fg:#3498db"),
+    ("question", "fg:#95a5a6"),
+    ("selected", "fg:#FF00FF"),
+    ("pointer", "fg:#3498db"),
+    ("answer", "fg:#f2f2f2"),
+    ("separator", "fg:#666666"),
+    ("highlighted", "fg:#3498db"),
+    ("disabled", "fg:#858585 italic"),
+    ("instruction", "fg:#5f5f5f italic")
 ])
 
 # Handle Ctrl+C
@@ -26,17 +55,17 @@ def signal_handler(sig, frame):
 
 signal.signal(signal.SIGINT, signal_handler)
 
-# Masukkan nama proyek
+# ==== Masukkan nama proyek ====
 project_name = questionary.text(
     "📁 Masukkan nama proyek:",
     style=custom_style
-    ).ask()
+).ask()
 if not project_name:
     print("❌ Nama proyek tidak boleh kosong.")
     sys.exit(1)
 project_name = project_name.strip().replace(" ", "-")
 
-# Pilih tipe proyek
+# ==== Pilih tipe proyek ====
 project_type = questionary.select(
     "🌟 Pilih Tipe Proyek:",
     choices=[
@@ -48,22 +77,18 @@ project_type = questionary.select(
     pointer="➥"
 ).ask()
 
-# Pilih CSS framework
+# ==== Pilih CSS framework ====
 if project_type == "react":
     css_framework = questionary.select(
         "🎨 Pilih CSS untuk React:",
-        choices=[
-            Choice("CSS Sendiri", "CSS standard"),
-        ],
+        choices=[Choice("CSS Sendiri", "CSS standard")],
         style=custom_style,
         pointer="➥"
     ).ask()
-if project_type == "vue":
+elif project_type == "vue":
     css_framework = questionary.select(
         "🎨 Pilih CSS untuk Vue:",
-        choices=[
-            Choice("CSS Sendiri", "CSS standard")
-        ],
+        choices=[Choice("CSS Sendiri", "CSS standard")],
         style=custom_style,
         pointer="➥"
     ).ask()
@@ -79,7 +104,10 @@ else:
         pointer="➥"
     ).ask()
 
-# Fungsi bantu menulis file
+
+print("\n")
+
+# ==== Fungsi bantu menulis file ====
 def write_file(path, content):
     with open(path, "w", encoding="utf-8") as f:
         f.write(content)
@@ -117,7 +145,6 @@ if project_type == "html":
 # ==== React ====
 elif project_type == "react":
     print("🔄 Meng-clone template React dari GitHub...")
-
     repo_url = "https://github.com/zen-Hikari/react-template.git"
     try:
         result = os.system(f"git clone {repo_url} {project_name}")
@@ -129,8 +156,7 @@ elif project_type == "react":
 
 # ==== Vue ====
 elif project_type == "vue":
-    print("🔄 Meng-clone template Vue dari GitHub..")
-    
+    print("🔄 Meng-clone template Vue dari GitHub...")
     repo_url_vue = "https://github.com/zen-Hikari/vue-template.git"
     try:
         result = os.system(f"git clone {repo_url_vue} {project_name}")
@@ -139,9 +165,8 @@ elif project_type == "vue":
     except Exception as e:
         print(f"❌ Gagal clone repo: {e}")
         sys.exit(1)
-    
-    # Update nama proyek di package.json
-    pkg_path = os.path.join(project_name, "package.json")   
+
+    pkg_path = os.path.join(project_name, "package.json")
     if os.path.exists(pkg_path):
         with open(pkg_path, "r+", encoding="utf-8") as f:
             data = json.load(f)
@@ -153,7 +178,7 @@ elif project_type == "vue":
 # ==== OUTPUT ====
 print("\n✅ Proyek berhasil dibuat!")
 print(f"📁 Nama proyek: {project_name}")
-print(f"🔧 Tipe: {'HTML + CSS' if project_type == 'html' else 'React'}")
+print(f"🔧 Tipe: {'HTML + CSS' if project_type == 'html' else project_type.capitalize()}")
 print(f"🎨 CSS: {css_framework}")
 print("🚀 Jalankan:")
 print(f"   cd {project_name}")
