@@ -6,6 +6,7 @@ import path from "path";
 import fs from "fs";
 import { fileURLToPath } from 'url';
 
+// ES Module Path Resolver
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -17,7 +18,7 @@ try {
   process.exit(1);
 }
 
-// Jalankan __main__.py
+// Jalankan __main__.py dengan argumen CLI
 const scriptPath = path.join(__dirname, "__main__.py");
 
 if (!fs.existsSync(scriptPath)) {
@@ -26,7 +27,8 @@ if (!fs.existsSync(scriptPath)) {
 }
 
 try {
-  const args = process.argv.slice(2).join(" "); // Teruskan semua args ke Python
+  // Ambil semua argumen CLI kecuali "node" dan "index.js"
+  const args = process.argv.slice(2).join(" ");
   execSync(`python "${scriptPath}" ${args}`, { stdio: "inherit" });
 } catch (error) {
   console.error("❌ Gagal menjalankan __main__.py:", error.message);
