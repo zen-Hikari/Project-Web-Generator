@@ -16,7 +16,7 @@ const __dirname = path.dirname(__filename);
 const notifier = updateNotifier({ pkg });
 if (notifier.update) {
   console.log(chalk.yellow(`🚨 Update tersedia! Versi baru: ${notifier.update.latest}`));
-  console.log(chalk.green(`Jalankan 'npm update -g @novalhikari/webgen-cli' untuk memperbarui.`));
+  console.log(chalk.green(`Jalankan 'pnpm update -g @novalhikari/webgen-cli' untuk memperbarui.`));
 }
 
 // Bersihkan terminal dan info versi
