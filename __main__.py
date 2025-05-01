@@ -6,6 +6,66 @@ import signal
 import questionary
 from questionary import Choice, Style
 
+
+# ==== baca package.json ====
+def get_version_from_package():
+    try:
+        with open("package.json", "r", encoding="utf-8") as f:
+            data = json.load(f)
+            return data.get("version", "Unknown")
+    except FileNotFoundError:
+        return "package.json not found"
+    except json.JSONDecodeError:
+        return "Invalid package.json"
+
+# ======== CLI ARGUMENTS HANDLER ========
+
+def show_help():
+    print("""
+Usage: python main.py [OPTIONS]
+
+Options:
+  --help        Show help and how to use
+  --list        Show list of available templates and CSS
+  --version     Show project version
+""")
+
+def show_list():
+    print("""
+🧩 Available Project Templates:
+  - HTML + CSS
+  - React
+  - Vue
+
+🎨 Available CSS Frameworks:
+  For HTML:
+    - Manual CSS
+    - Tailwind CSS
+    - Bootstrap
+  For React & Vue:
+    - CSS Sendiri
+""")
+    
+def show_version():
+    version = get_version_from_package()
+    print(f"Webgen CLI Generator - Version {version}")
+    sys.exit(0)
+
+# Check arguments
+if len(sys.argv) > 1:
+    arg = sys.argv[1]
+    if arg == "--help":
+        show_help()
+        sys.exit(0)
+    elif arg == "--list":
+        show_list()
+        sys.exit(0)
+    elif arg == "--version":
+        show_version()
+        sys.exit(0)
+
+
+
 # === ASCII ART di Awal ===
 ascii_art = """
 \033[1;35m
