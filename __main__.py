@@ -42,6 +42,7 @@ project_type = questionary.select(
     choices=[
         Choice(title="HTML + CSS", value="html"),
         Choice(title="React", value="react"),
+        Choice(title="Vue", value="vue"),
     ],
     style=custom_style,
     pointer="➥"
@@ -53,6 +54,15 @@ if project_type == "react":
         "🎨 Pilih CSS untuk React:",
         choices=[
             Choice("CSS Sendiri", "CSS standard"),
+        ],
+        style=custom_style,
+        pointer="➥"
+    ).ask()
+if project_type == "vue":
+    css_framework = questionary.select(
+        "🎨 Pilih CSS untuk Vue:",
+        choices=[
+            Choice("CSS Sendiri", "CSS standard")
         ],
         style=custom_style,
         pointer="➥"
@@ -117,8 +127,21 @@ elif project_type == "react":
         print(f"❌ Gagal clone repo: {e}")
         sys.exit(1)
 
+# ==== Vue ====
+elif project_type == "vue":
+    print("🔄 Meng-clone template Vue dari GitHub..")
+    
+    repo_url_vue = "https://github.com/zen-Hikari/vue-template.git"
+    try:
+        result = os.system(f"git clone {repo_url_vue} {project_name}")
+        if result != 0:
+            raise Exception("Perintah git clone gagal")
+    except Exception as e:
+        print(f"❌ Gagal clone repo: {e}")
+        sys.exit(1)
+    
     # Update nama proyek di package.json
-    pkg_path = os.path.join(project_name, "package.json")
+    pkg_path = os.path.join(project_name, "package.json")   
     if os.path.exists(pkg_path):
         with open(pkg_path, "r+", encoding="utf-8") as f:
             data = json.load(f)
@@ -134,5 +157,5 @@ print(f"🔧 Tipe: {'HTML + CSS' if project_type == 'html' else 'React'}")
 print(f"🎨 CSS: {css_framework}")
 print("🚀 Jalankan:")
 print(f"   cd {project_name}")
-if project_type == "react":
+if project_type in ("react", "vue"):
     print("   pnpm install && pnpm run dev")
