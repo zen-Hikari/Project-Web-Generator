@@ -24,7 +24,7 @@ function getLocalVersion() {
 // Fungsi cek versi terbaru dari npm
 function getLatestNpmVersion(pkgName) {
   try {
-    const output = execSync(`npm view ${pkgName} version`, { encoding: "utf-8" });
+    const output = execSync(`pnpm view ${pkgName} version`, { encoding: "utf-8" });
     return output.trim();
   } catch {
     return null;
