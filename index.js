@@ -16,7 +16,11 @@ const notifier = updateNotifier({ pkg });
 if (notifier.update) {
   console.log(chalk.yellow(`🚨 Update tersedia! Versi baru: ${notifier.update.latest}`));
   console.log(chalk.green(`Jalankan 'pnpm update -g @novalhikari/webgen-cli' untuk memperbarui.`));
+} else {
+  console.log(chalk.green("✅ Tidak ada pembaruan tersedia."));
 }
+
+console.log("DEBUG UPDATE CHECK:", notifier.update);
 // Cek apakah Python tersedia
 try {
   execSync("python --version", { stdio: "ignore" });
