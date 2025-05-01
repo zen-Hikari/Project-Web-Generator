@@ -8,18 +8,17 @@ from questionary import Choice, Style
 
 
 # ==== baca package.json ====
-def get_version_from_package(path="package.json"):
+def get_version_from_package():
     try:
+        base_dir = os.path.dirname(os.path.abspath(__file__))  # Lokasi file .py ini
+        path = os.path.join(base_dir, "package.json")  # Path ke package.json
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
             return data.get("version", "Unknown")
     except FileNotFoundError:
-        return f"{path} not found"
+        return f"package.json not found"
     except json.JSONDecodeError:
-        return f"Invalid JSON in {path}"
-
-
-version = get_version_from_package("package.json")
+        return f"Invalid JSON in package.json"
 
 # ======== CLI ARGUMENTS HANDLER ========
 
