@@ -11,18 +11,12 @@ import pkg from './package.json' assert { type: 'json' };
 // Menangani path untuk modul ES
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 // Notifikasi update
 const notifier = updateNotifier({ pkg });
 if (notifier.update) {
   console.log(chalk.yellow(`🚨 Update tersedia! Versi baru: ${notifier.update.latest}`));
   console.log(chalk.green(`Jalankan 'pnpm update -g @novalhikari/webgen-cli' untuk memperbarui.`));
 }
-
-// Bersihkan terminal dan info versi
-console.clear();
-console.log(chalk.blueBright(`🚀 WebGen CLI v${pkg.version}`));
-
 // Cek apakah Python tersedia
 try {
   execSync("python --version", { stdio: "ignore" });
@@ -40,7 +34,8 @@ if (!fs.existsSync(scriptPath)) {
 }
 
 try {
-  execSync(`python "${scriptPath}"`, { stdio: "inherit" });
+  const args = process.argv.slice(2).join(" ");
+  execSync(`python "${scriptPath}" ${args}`, { stdio: "inherit" });
 } catch (error) {
   console.error("❌ Gagal menjalankan __main__.py:", error.message);
   process.exit(1);

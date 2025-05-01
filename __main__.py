@@ -8,15 +8,18 @@ from questionary import Choice, Style
 
 
 # ==== baca package.json ====
-def get_version_from_package():
+def get_version_from_package(path="package.json"):
     try:
-        with open("package.json", "r", encoding="utf-8") as f:
+        with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
             return data.get("version", "Unknown")
     except FileNotFoundError:
-        return "package.json not found"
+        return f"{path} not found"
     except json.JSONDecodeError:
-        return "Invalid package.json"
+        return f"Invalid JSON in {path}"
+
+
+version = get_version_from_package("package.json")
 
 # ======== CLI ARGUMENTS HANDLER ========
 

@@ -1,6 +1,6 @@
 {
   "name": "@novalhikari/webgen-cli",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "CLI untuk membuat proyek template menggunakan Python",
   "main": "index.js",
   "bin": {
