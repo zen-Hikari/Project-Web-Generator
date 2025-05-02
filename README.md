@@ -19,23 +19,11 @@ Project Web Generator is a 🛠️ Python tool that helps developers quickly cre
 ### 🔹 Install Globally
 To use `webgen` as a globally executable command:
 
-1. Install the package in editable mode:
-   ```sh
-   git clone https://github.com/zen-Hikari/Project-Web-Generator.git
-   ```
-2. Navigate to the project folder:
-   ```sh
-   cd Project-Web-Generator
-   ```
-3. Install dependencies using:
-   ```sh
-   pip install -r requirements.txt
-   ```
-4. Install Globally
+1. Install Globally
    ```sh
    pnpm add -g @novalhikari/webgen-cli
    ```
-5. Run the tool:
+2. Run the tool:
    ```sh
    webgen
    ```
