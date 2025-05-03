@@ -162,7 +162,7 @@ if project_type == "react":
             print(f"❌ gagal repo: {e}")
             sys.exit(1)
     elif variant_framework == "TypeScript":
-        print("🔄 meng-clone project Vue TS dari repo...")
+        print("🔄 meng-clone project React TS dari repo...")
         url_repo_react_ts = "https://github.com/zen-Hikari/react-ts-template.git"
         try:
             result = os.system(f"git clone {url_repo_react_ts} {project_name}")

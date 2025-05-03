@@ -53,24 +53,51 @@ try {
   process.exit(1);
 }
 
-// Cek apakah modul Python seperti questionary sudah terinstall
-try {
-  execSync("python -c \"import questionary\"", { stdio: "ignore" });
-} catch {
+// Cek dan install module Python jika ada yang belum terinstall
+function ensurePythonModulesInstalled() {
   const requirementsPath = path.join(__dirname, "requirements.txt");
-  if (fs.existsSync(requirementsPath)) {
+
+  if (!fs.existsSync(requirementsPath)) {
+    console.warn(chalk.red("⚠️ File requirements.txt tidak ditemukan."));
+    return;
+  }
+
+  console.log(chalk.cyan("🔍 Mengecek dependensi Python..."));
+
+  const requirements = fs.readFileSync(requirementsPath, "utf-8")
+    .split("\n")
+    .map(line => line.trim())
+    .filter(line => line && !line.startsWith("#"));
+
+  let needInstall = false;
+
+  for (const moduleLine of requirements) {
+    const moduleName = moduleLine.split(/[<=>]/)[0];
+    try {
+      execSync(`python -c "import ${moduleName}"`, { stdio: "ignore" });
+    } catch {
+      needInstall = true;
+      break;
+    }
+  }
+
+  if (needInstall) {
     console.log(chalk.yellow("📦 Menginstal dependensi Python dari requirements.txt..."));
     try {
-      execSync(`pip install -r "${requirementsPath}"`, { stdio: "inherit" });
-    } catch (e) {
+      execSync(`pip install -r "${requirementsPath}" || pip3 install -r "${requirementsPath}"`, {
+        stdio: "inherit",
+        shell: true // supaya bisa jalan "||"
+      });
+    } catch {
       console.error(chalk.red("❌ Gagal menginstal dependencies Python."));
       process.exit(1);
     }
   } else {
-    console.warn(chalk.red("⚠️ File requirements.txt tidak ditemukan, dan modul Python belum terinstall."));
-    process.exit(1);
+    console.log(chalk.green("✅ Semua dependensi Python sudah terinstall."));
   }
 }
+
+ensurePythonModulesInstalled();
 
 // Jalankan __main__.py dengan argumen CLI
 const scriptPath = path.join(__dirname, "__main__.py");
