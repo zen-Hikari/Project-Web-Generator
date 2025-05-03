@@ -129,7 +129,7 @@ project_name = project_name.strip().replace(" ", "-")
 
 # ==== Pilih tipe proyek ====
 project_type = questionary.select(
-    "🌟 Pilih Tipe Proyek:",
+    "🌟 Pilih FrameWork:",
     choices=[
         Choice(title="HTML + CSS", value="html"),
         Choice(title="React", value="react"),
@@ -139,21 +139,69 @@ project_type = questionary.select(
     pointer="➥"
 ).ask()
 
-# ==== Pilih CSS framework ====
+# ==== Pilih variant framework ====
+# ==== react ====
 if project_type == "react":
-    css_framework = questionary.select(
-        "🎨 Pilih CSS untuk React:",
-        choices=[Choice("CSS Sendiri", "CSS standard")],
+    variant_framework = questionary.select(
+        "🔧 Pilih Variant untuk React:",
+        choices=[
+            Choice("JavaScript", "JavaScript"),
+            Choice("TypeScript", "TypeScript"),
+            ],
         style=custom_style,
         pointer="➥"
     ).ask()
+    if variant_framework == "JavaScript":
+        print("🔄 meng-clone project React Js dari repo...")
+        repo_url_react_js = "https://github.com/zen-Hikari/react-template.git"
+        try:
+            result = os.system(f"git clone {repo_url_react_js} {project_name}")
+            if result != 0:
+                raise Exception("printah git clone gagal")
+        except Exception as e:
+            print(f"❌ gagal repo: {e}")
+            sys.exit(1)
+    elif variant_framework == "TypeScript":
+        print("🔄 meng-clone project Vue TS dari repo...")
+        url_repo_react_ts = "https://github.com/zen-Hikari/react-ts-template.git"
+        try:
+            result = os.system(f"git clone {url_repo_react_ts} {project_name}")
+            if result != 0:
+                raise Exception("perintah git clone gagal")
+        except Exception as e:
+            print(f"❌ gagal repo: {e}")
+            sys.exit(1)
+# ==== vue ====
 elif project_type == "vue":
-    css_framework = questionary.select(
-        "🎨 Pilih CSS untuk Vue:",
-        choices=[Choice("CSS Sendiri", "CSS standard")],
+    variant_framework = questionary.select(
+        "🔧 Pilih Variant untuk Vue:",
+        choices=[
+            Choice("JavaScript", "JavaScript"),
+            Choice("TypeScript", "TypeScript")
+            ],
         style=custom_style,
         pointer="➥"
     ).ask()
+    if variant_framework == "TypeScript":
+        print("🔄 meng-clone project Vue TS dari repo...")
+        repo_url_vue_ts = "https://github.com/zen-Hikari/vue-ts-template.git"
+        try:
+            result = os.system(f"git clone {repo_url_vue_ts} {project_name}")
+            if result != 0:
+                raise Exception("Perintah git clone gagal")
+        except Exception as e:
+            print(f"❌ Gagal clone repo: {e}")
+            sys.exit(1)
+    elif variant_framework == "JavaScript":
+        print("🔄 meng-clone project Vue Js dari repo...")
+        repo_url_vue = "https://github.com/zen-Hikari/vue-template.git"
+        try:
+            result = os.system(f"git clone {repo_url_vue} {project_name}")
+            if result != 0:
+                raise Exception("Perintah git clone gagal")
+        except Exception as e:
+            print(f"❌ Gagal clone repo: {e}")
+            sys.exit(1)
 else:
     css_framework = questionary.select(
         "🎨 Pilih CSS untuk HTML:",
@@ -177,7 +225,7 @@ def write_file(path, content):
 # ==== HTML + CSS ====
 if project_type == "html":
     os.makedirs(f"{project_name}/css", exist_ok=True)
-    os.makedirs(f"{project_name}/js", exist_ok=True)
+    os.makedirs(f"{project_name}/js", exist_ok=True)   
 
     css_cdn = ""
     if css_framework == "Tailwind CSS":
@@ -203,31 +251,7 @@ if project_type == "html":
     write_file(f"{project_name}/index.html", html_content)
     write_file(f"{project_name}/css/style.css", "body { font-family: Arial, sans-serif; }")
     write_file(f"{project_name}/js/script.js", "console.log('Hello World');")
-
-# ==== React ====
-elif project_type == "react":
-    print("🔄 Meng-clone template React dari GitHub...")
-    repo_url = "https://github.com/zen-Hikari/react-template.git"
-    try:
-        result = os.system(f"git clone {repo_url} {project_name}")
-        if result != 0:
-            raise Exception("Perintah git clone gagal")
-    except Exception as e:
-        print(f"❌ Gagal clone repo: {e}")
-        sys.exit(1)
-
-# ==== Vue ====
-elif project_type == "vue":
-    print("🔄 Meng-clone template Vue dari GitHub...")
-    repo_url_vue = "https://github.com/zen-Hikari/vue-template.git"
-    try:
-        result = os.system(f"git clone {repo_url_vue} {project_name}")
-        if result != 0:
-            raise Exception("Perintah git clone gagal")
-    except Exception as e:
-        print(f"❌ Gagal clone repo: {e}")
-        sys.exit(1)
-
+    
     pkg_path = os.path.join(project_name, "package.json")
     if os.path.exists(pkg_path):
         with open(pkg_path, "r+", encoding="utf-8") as f:
@@ -241,8 +265,12 @@ elif project_type == "vue":
 print("\n✅ Proyek berhasil dibuat!")
 print(f"📁 Nama proyek: {project_name}")
 print(f"🔧 Tipe: {'HTML + CSS' if project_type == 'html' else project_type.capitalize()}")
-print(f"🎨 CSS: {css_framework}")
+if project_type in ("html"):
+    print(f"🎨 CSS: {css_framework}")
+if project_type in ("react", "vue"):
+    print(f"Variant: {variant_framework}")
 print("🚀 Jalankan:")
 print(f"   cd {project_name}")
 if project_type in ("react", "vue"):
     print("   pnpm install && pnpm run dev")
+

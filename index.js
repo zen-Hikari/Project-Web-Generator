@@ -53,6 +53,25 @@ try {
   process.exit(1);
 }
 
+// Cek apakah modul Python seperti questionary sudah terinstall
+try {
+  execSync("python -c \"import questionary\"", { stdio: "ignore" });
+} catch {
+  const requirementsPath = path.join(__dirname, "requirements.txt");
+  if (fs.existsSync(requirementsPath)) {
+    console.log(chalk.yellow("📦 Menginstal dependensi Python dari requirements.txt..."));
+    try {
+      execSync(`pip install -r "${requirementsPath}"`, { stdio: "inherit" });
+    } catch (e) {
+      console.error(chalk.red("❌ Gagal menginstal dependencies Python."));
+      process.exit(1);
+    }
+  } else {
+    console.warn(chalk.red("⚠️ File requirements.txt tidak ditemukan, dan modul Python belum terinstall."));
+    process.exit(1);
+  }
+}
+
 // Jalankan __main__.py dengan argumen CLI
 const scriptPath = path.join(__dirname, "__main__.py");
 
